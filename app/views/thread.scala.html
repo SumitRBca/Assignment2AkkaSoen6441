@@ -1,0 +1,15 @@
+@(data : QuerySearchResult)
+@import helper._
+
+@main("Subreddit") {
+  <h2>Subreddit</h2>
+
+  @for(post <- data.getData()) {
+    <article>
+      <p>
+        @post.title - <a href="user/@post.author">@post.author</a><br />
+        @post.selftext
+      </p>
+    </article>
+  }
+}

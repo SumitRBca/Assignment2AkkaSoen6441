@@ -1,0 +1,27 @@
+@(data : QuerySearchResult)
+@import helper._
+
+@main("Profile") {
+  <h2>User Profile</h2>
+
+  @if(!data.getData().isEmpty()) {
+    <table>
+      <tbody>
+        <tr><td>Name</td><td>@data.getData().get(0).author_fullname</td></tr>
+        <tr><td>Id</td><td>@data.getData().get(0).author</td></tr>
+        <tr><td>Blocked</td><td>@data.getData().get(0).author_is_blocked</td></tr>
+        <tr><td>Premium</td><td>@data.getData().get(0).author_premium</td></tr>
+      </tbody>
+    </table>
+    @for(post <- data.getData()) {
+      <article>
+        <p>
+          @post.title - <a href="thread/@post.subreddit">@post.subreddit</a><br/>
+          @post.selftext
+        </p>
+      </article>
+    }
+  } else {
+    <h4>No results found</h4>
+  }
+}
