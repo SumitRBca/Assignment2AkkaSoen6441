@@ -39,12 +39,6 @@ public class CacheManager {
     return cache;
   }
 
-  // public QuerySearchResult GetFullSearchResult(String keyTerm){
-  //   System.out.println(keyTerm);
-  //   if(!results.containsKey(keyTerm)) AddToCache(keyTerm);
-  //   return results.get(keyTerm);
-  // }
-
   public CompletableFuture<QuerySearchResult> GetTrimmedSearchResult(String keyTerm){
     if(!results.containsKey(keyTerm)) {
       return AddToCache(keyTerm).thenApply((List<SearchResult> a) -> {
@@ -69,35 +63,51 @@ public class CacheManager {
     });
   }
 
-  public QuerySearchResult GetThreadInfo(String key) {
-    if (!threadResults.containsKey(key)) {
-      AddThreadToCache(key);
+  public CompletableFuture<QuerySearchResult> GetThreadInfo(String keyTerm){
+    if(!threadResults.containsKey(keyTerm)) {
+      return AddThreadToCache(keyTerm).thenApply((List<SearchResult> a) -> {
+        var returnData = new QuerySearchResult(keyTerm);
+        returnData.setKeyTermData(threadResults.get(keyTerm).getAllPosts().stream().limit(10).collect(Collectors.toList()));
+        return returnData;
+      }).toCompletableFuture();
     }
 
-    var returnData = new QuerySearchResult(key);
-    returnData.setKeyTermData(threadResults.get(key).getAllPosts().stream().limit(10).collect(Collectors.toList()));
-    return returnData;
+    return CompletableFuture.supplyAsync(() -> {
+      var returnData = new QuerySearchResult(keyTerm);
+      returnData.setKeyTermData(threadResults.get(keyTerm).getAllPosts().stream().limit(10).collect(Collectors.toList()));
+      return returnData;
+    });
   }
 
-  private void AddThreadToCache(String key) {
-    var result = new QuerySearchResult(key);
-    result.PopulateThread(helper);
-    threadResults.put(key, result);
+  private CompletionStage<List<SearchResult>> AddThreadToCache(String keyTerm){
+    var result = new QuerySearchResult(keyTerm);
+    return result.PopulateThread(helper).thenApply((List<SearchResult> a) -> {
+      threadResults.put(keyTerm, result);
+      return a;
+    });
   }
 
-  public QuerySearchResult GetUserInfo(String key) {
-    if (!userResults.containsKey(key)) {
-      AddUserInfoToCache(key);
+  public CompletableFuture<QuerySearchResult> GetUserInfo(String keyTerm){
+    if(!userResults.containsKey(keyTerm)) {
+      return AddUserInfoToCache(keyTerm).thenApply((List<SearchResult> a) -> {
+        var returnData = new QuerySearchResult(keyTerm);
+        returnData.setKeyTermData(userResults.get(keyTerm).getAllPosts().stream().limit(10).collect(Collectors.toList()));
+        return returnData;
+      }).toCompletableFuture();
     }
 
-    var returnData = new QuerySearchResult(key);
-    returnData.setKeyTermData(userResults.get(key).getAllPosts().stream().limit(10).collect(Collectors.toList()));
-    return returnData;
+    return CompletableFuture.supplyAsync(() -> {
+      var returnData = new QuerySearchResult(keyTerm);
+      returnData.setKeyTermData(userResults.get(keyTerm).getAllPosts().stream().limit(10).collect(Collectors.toList()));
+      return returnData;
+    });
   }
 
-  private void AddUserInfoToCache(String key) {
-    var result = new QuerySearchResult(key);
-    result.PopulateUser(helper);
-    userResults.put(key, result);
+  private CompletionStage<List<SearchResult>> AddUserInfoToCache(String keyTerm){
+    var result = new QuerySearchResult(keyTerm);
+    return result.PopulateUser(helper).thenApply((List<SearchResult> a) -> {
+      userResults.put(keyTerm, result);
+      return a;
+    });
   }
 }

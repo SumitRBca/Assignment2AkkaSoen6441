@@ -45,19 +45,21 @@ public class QuerySearchResult {
     });
   }
 
-  public void PopulateThread(RedditHelper helper) {
+  public CompletionStage<List<SearchResult>> PopulateThread(RedditHelper helper) {
     var response = helper.getSubredditPosts(this.searchTerm);
-    this.setKeyTermData(response);
+    return response.thenApply((List<SearchResult> posts) -> {
+      this.allPosts = posts;
+      return posts;
+    });
   }
 
-  public void PopulateUser(RedditHelper helper) {
+  public CompletionStage<List<SearchResult>> PopulateUser(RedditHelper helper) {
     var response = helper.getUserPosts(this.searchTerm);
-    this.setKeyTermData(response);
+    return response.thenApply((List<SearchResult> posts) -> {
+      this.allPosts = posts;
+      return posts;
+    });
   }
-
-  // private SearchResult mapKeyTermData(SearchResult e){
-  //   return new SearchResult(e.getId().getVideoId(),e.getSnippet().getChannelId(),e.getSnippet().getChannelTitle(),e.getSnippet().getTitle(), Utility.GetTimeElapsedTillNow(e.getSnippet().getPublishedAt()));
-  // }
 
   public List<SearchResult> getAllPosts(){
     return this.allPosts;

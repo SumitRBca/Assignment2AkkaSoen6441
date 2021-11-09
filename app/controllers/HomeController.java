@@ -43,35 +43,10 @@ public class HomeController extends Controller implements WSBodyReadables, WSBod
         } else {
             var post = Arrays.stream(sessionData.get().split(","))
             .filter(e -> !e.isEmpty()).parallel().map(CacheManager.GetCache(ws)::GetTrimmedSearchResult).collect(Collectors.toList());
-
-            System.out.println("23");
-            System.out.println(post);
             var arrPost = post.toArray(new CompletableFuture[post.size()]);
-
-            System.out.println("33");
-            System.out.println(arrPost);
-
             return CompletableFuture.allOf(arrPost).thenApply(v -> post.stream().map(CompletableFuture::join).collect(Collectors.toList())).thenApply(res -> {
-                System.out.println("43");
-                System.out.println(res);
-
-
                 return ok(views.html.index.render(res));
             });
-            // return CompletableFuture.allOf(post)
-            //     .thenApply((List<QuerySearchResult> a) -> {
-            //     return ok(views.html.index.render(a));
-            // });
-            // return CompletableFuture.allOf(Arrays
-            //     .stream(sessionData.get().split(","))
-            //     .filter(e -> !e.isEmpty())
-            //     .parallel()
-            //     .map(CacheManager.GetCache(ws)::GetTrimmedSearchResult)
-            //     .collect(Collectors.toList())
-            //     .toArray(new CompletableFuture[post.s])
-            // ).thenApply((List<QuerySearchResult> a)-> {
-            //     return ok(views.html.index.render(a));
-            // });
         }
     }
 
@@ -82,14 +57,15 @@ public class HomeController extends Controller implements WSBodyReadables, WSBod
         return redirect("/").addingToSession(request, "searchedTerms", currentSession);
     }
 
-    public Result searchUser(String user, Http.Request request) {
-        var result = CacheManager.GetCache(ws).GetUserInfo((user));
-        return ok(views.html.profile.render(result));
+    public CompletableFuture<Result> searchUser(String user, Http.Request request) {
+        return CacheManager.GetCache(ws).GetUserInfo((user)).thenApply((result) -> {
+            return ok(views.html.profile.render(result));
+        });
     }
 
-    public Result searchThread(String subreddit, Http.Request request)  {
-        var result = CacheManager.GetCache(ws).GetThreadInfo((subreddit));
-        return ok(views.html.thread.render(result));
+    public CompletableFuture<Result> searchThread(String subreddit, Http.Request request) {
+        return CacheManager.GetCache(ws).GetThreadInfo((subreddit)).thenApply((result) -> {
+            return ok(views.html.profile.render(result));
+        });
     }
-
 }

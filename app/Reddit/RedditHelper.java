@@ -24,47 +24,50 @@ public class RedditHelper {
     this.ws = ws;
   }
 
-  public List<SearchResult> getSubredditPosts(String sr) {
-    try {
-      WSRequest req = ws.url(endpoint + "/submission");
-      req.addQueryParameter("q", "");
-      req.addQueryParameter("subreddit", sr);
-      req.addQueryParameter("over_18", "false");
+  public CompletionStage<List<SearchResult>> getSubredditPosts(String sr) {
+    System.out.println("thread --" + sr);
 
-      WSResponse res = req.get().toCompletableFuture().get();
+    WSRequest req = ws.url(endpoint + "/submission");
+    req.addQueryParameter("q", "");
+    req.addQueryParameter("subreddit", sr);
+    req.addQueryParameter("over_18", "false");
 
-      ObjectMapper mapper = new ObjectMapper();
-      List<SearchResult> postList = new ArrayList<SearchResult>();
-      mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-      postList = Arrays.asList(mapper.readValue(res.asJson().get("data").toString(), SearchResult[].class));
-      // System.out.println(postList);
-      return postList;
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;
-    }
+    return req.get().thenApply((WSResponse res) -> {
+      try {
+        ObjectMapper mapper = new ObjectMapper();
+        List<SearchResult> postList = new ArrayList<SearchResult>();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        postList = Arrays.asList(mapper.readValue(res.asJson().get("data").toString(), SearchResult[].class));
+        System.out.println(postList);
+        return postList;
+
+      } catch (Exception e) {
+        e.printStackTrace();
+        return null;
+      }
+    });
   }
 
-  public List<SearchResult> getUserPosts(String author) {
-    try {
-      WSRequest req = ws.url(endpoint + "/submission");
-      req.addQueryParameter("q", "");
-      req.addQueryParameter("author", author);
-      req.addQueryParameter("over_18", "false");
+  public CompletionStage<List<SearchResult>> getUserPosts(String author) {
+    WSRequest req = ws.url(endpoint + "/submission");
+    req.addQueryParameter("q", "");
+    req.addQueryParameter("author", author);
+    req.addQueryParameter("over_18", "false");
 
-      WSResponse res = req.get().toCompletableFuture().get();
+    return req.get().thenApply((WSResponse res) -> {
+      try {
+        ObjectMapper mapper = new ObjectMapper();
+        List<SearchResult> postList = new ArrayList<SearchResult>();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        postList = Arrays.asList(mapper.readValue(res.asJson().get("data").toString(), SearchResult[].class));
+        System.out.println(postList);
+        return postList;
 
-      ObjectMapper mapper = new ObjectMapper();
-      List<SearchResult> postList = new ArrayList<SearchResult>();
-      mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-      postList = Arrays.asList(mapper.readValue(res.asJson().get("data").toString(), SearchResult[].class));
-      // System.out.println(postList);
-      return postList;
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;
-    }
-
+      } catch (Exception e) {
+        e.printStackTrace();
+        return null;
+      }
+    });
   }
 
   public CompletionStage<List<SearchResult>> getSearchResult(String query) {
