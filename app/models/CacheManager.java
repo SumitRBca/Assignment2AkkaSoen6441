@@ -49,15 +49,14 @@ public class CacheManager {
     if(!results.containsKey(keyTerm)) {
       return AddToCache(keyTerm).thenApply((List<SearchResult> a) -> {
         var returnData = new QuerySearchResult(keyTerm);
-        returnData.setKeyTermData(results.get(keyTerm).getData().stream().limit(10).collect(Collectors.toList()));
+        returnData.setKeyTermData(results.get(keyTerm).getAllPosts().stream().limit(10).collect(Collectors.toList()));
         return returnData;
       }).toCompletableFuture();
     }
 
-
     return CompletableFuture.supplyAsync(() -> {
       var returnData = new QuerySearchResult(keyTerm);
-      returnData.setKeyTermData(results.get(keyTerm).getData().stream().limit(10).collect(Collectors.toList()));
+      returnData.setKeyTermData(results.get(keyTerm).getAllPosts().stream().limit(10).collect(Collectors.toList()));
       return returnData;
     });
   }
@@ -76,7 +75,7 @@ public class CacheManager {
     }
 
     var returnData = new QuerySearchResult(key);
-    returnData.setKeyTermData(threadResults.get(key).getData().stream().limit(10).collect(Collectors.toList()));
+    returnData.setKeyTermData(threadResults.get(key).getAllPosts().stream().limit(10).collect(Collectors.toList()));
     return returnData;
   }
 
@@ -92,7 +91,7 @@ public class CacheManager {
     }
 
     var returnData = new QuerySearchResult(key);
-    returnData.setKeyTermData(userResults.get(key).getData().stream().limit(10).collect(Collectors.toList()));
+    returnData.setKeyTermData(userResults.get(key).getAllPosts().stream().limit(10).collect(Collectors.toList()));
     return returnData;
   }
 

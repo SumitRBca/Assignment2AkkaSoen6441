@@ -4,6 +4,7 @@ package models;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
@@ -18,10 +19,15 @@ import static java.util.stream.Collectors.*;
 public class QuerySearchResult {
   private String searchTerm;
   private List<SearchResult> posts;
+  private List<SearchResult> allPosts;
+  private HashMap<String, Integer> analytics;
+  // private static String[] IGNORE_WORDS = new String[] { "the", "is", "in", "for", "where", "when", "to", "at" };
 
   public QuerySearchResult(String query) {
     this.searchTerm = query;
     this.posts = new ArrayList<>();
+    this.allPosts = new ArrayList<>();
+    this.analytics = new HashMap<String, Integer>();
   }
 
   public String getSearchTerm() {
@@ -30,10 +36,11 @@ public class QuerySearchResult {
 
   public CompletionStage<List<SearchResult>> PopulateData(RedditHelper helper) {
     var response = helper.getSearchResult(this.searchTerm);
-    // System.out.println(response);
-    // this.setKeyTermData(response);
     return response.thenApply((List<SearchResult> posts) -> {
-      this.posts = posts;
+      this.allPosts = posts;
+      // var x = Arrays.stream(posts).filter(v -> {
+      //   return v.title.length > 4 && v.selftext.length > 4 && !Arrays.stream(IGNORE_WORDS).anyMatch("s"::equals);
+      // }).map((var filteredPosts) -> {});
       return posts;
     });
   }
@@ -51,6 +58,10 @@ public class QuerySearchResult {
   // private SearchResult mapKeyTermData(SearchResult e){
   //   return new SearchResult(e.getId().getVideoId(),e.getSnippet().getChannelId(),e.getSnippet().getChannelTitle(),e.getSnippet().getTitle(), Utility.GetTimeElapsedTillNow(e.getSnippet().getPublishedAt()));
   // }
+
+  public List<SearchResult> getAllPosts(){
+    return this.allPosts;
+  }
 
   public List<SearchResult> getData(){
     return this.posts;
