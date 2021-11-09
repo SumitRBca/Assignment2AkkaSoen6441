@@ -28,14 +28,14 @@ public class QuerySearchResult {
     return searchTerm;
   }
 
-  public void PopulateData(RedditHelper helper) {
+  public CompletionStage<List<SearchResult>> PopulateData(RedditHelper helper) {
     var response = helper.getSearchResult(this.searchTerm);
-    System.out.println(response);
-    this.setKeyTermData(response);
-    // response.thenApply((List<SearchResult> posts) -> {
-    //   this.posts = posts;
-    //   return posts;
-    // });
+    // System.out.println(response);
+    // this.setKeyTermData(response);
+    return response.thenApply((List<SearchResult> posts) -> {
+      this.posts = posts;
+      return posts;
+    });
   }
 
   public void PopulateThread(RedditHelper helper) {

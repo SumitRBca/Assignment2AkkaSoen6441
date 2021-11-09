@@ -9,6 +9,10 @@ import java.util.HashMap;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.stream.Collectors;
+import play.libs.ws.*;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 import Reddit.RedditHelper;
 
@@ -41,20 +45,29 @@ public class CacheManager {
   //   return results.get(keyTerm);
   // }
 
-  public QuerySearchResult GetTrimmedSearchResult(String keyTerm){
+  public CompletableFuture<QuerySearchResult> GetTrimmedSearchResult(String keyTerm){
     if(!results.containsKey(keyTerm)) {
-      AddToCache(keyTerm);
+      return AddToCache(keyTerm).thenApply((List<SearchResult> a) -> {
+        var returnData = new QuerySearchResult(keyTerm);
+        returnData.setKeyTermData(results.get(keyTerm).getData().stream().limit(10).collect(Collectors.toList()));
+        return returnData;
+      }).toCompletableFuture();
     }
 
-    var returnData = new QuerySearchResult(keyTerm);
-    returnData.setKeyTermData(results.get(keyTerm).getData().stream().limit(10).collect(Collectors.toList()));
-    return returnData;
+
+    return CompletableFuture.supplyAsync(() -> {
+      var returnData = new QuerySearchResult(keyTerm);
+      returnData.setKeyTermData(results.get(keyTerm).getData().stream().limit(10).collect(Collectors.toList()));
+      return returnData;
+    });
   }
 
-  private void AddToCache(String keyTerm){
+  private CompletionStage<List<SearchResult>> AddToCache(String keyTerm){
     var result = new QuerySearchResult(keyTerm);
-    result.PopulateData(helper);
-    results.put(keyTerm, result);
+    return result.PopulateData(helper).thenApply((List<SearchResult> a) -> {
+      results.put(keyTerm, result);
+      return a;
+    });
   }
 
   public QuerySearchResult GetThreadInfo(String key) {

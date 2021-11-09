@@ -67,23 +67,27 @@ public class RedditHelper {
 
   }
 
-  public List<SearchResult> getSearchResult(String query) {
-    try {
-      WSRequest req = ws.url(endpoint + "/submission");
-      req.addQueryParameter("q", query);
-      req.addQueryParameter("over_18", "false");
-      WSResponse res = req.get().toCompletableFuture().get();
+  public CompletionStage<List<SearchResult>> getSearchResult(String query) {
+    System.out.println("query --" + query);
 
-      ObjectMapper mapper = new ObjectMapper();
-      List<SearchResult> postList = new ArrayList<SearchResult>();
-      mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-      postList = Arrays.asList(mapper.readValue(res.asJson().get("data").toString(), SearchResult[].class));
-      // System.out.println(postList);
-      return postList;
+    WSRequest req = ws.url(endpoint + "/submission");
+    req.addQueryParameter("q", query);
+    req.addQueryParameter("over_18", "false");
+    // req.addQueryParameter("size", "100");
 
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;
-    }
+    return req.get().thenApply((WSResponse res) -> {
+      try {
+        ObjectMapper mapper = new ObjectMapper();
+        List<SearchResult> postList = new ArrayList<SearchResult>();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        postList = Arrays.asList(mapper.readValue(res.asJson().get("data").toString(), SearchResult[].class));
+        System.out.println(postList);
+        return postList;
+
+      } catch (Exception e) {
+        e.printStackTrace();
+        return null;
+      }
+    });
   }
 }

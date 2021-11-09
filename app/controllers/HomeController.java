@@ -5,6 +5,8 @@ import models.*;
 import play.mvc.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
 
@@ -32,15 +34,44 @@ public class HomeController extends Controller implements WSBodyReadables, WSBod
      * the application receives a <code>GET</code> request with a path of
      * <code>/</code>.
      */
-    public Result index(Http.Request request) {
+    public CompletableFuture<Result> index(Http.Request request) {
         var sessionData = request.session().get("searchedTerms");
         System.out.println(sessionData);
 
         if (!sessionData.isPresent()) {
-            return ok(views.html.index.render(new ArrayList<QuerySearchResult>()));
+            return CompletableFuture.supplyAsync(() -> ok(views.html.index.render(new ArrayList<QuerySearchResult>())));
         } else {
-            return ok(views.html.index.render(Arrays.stream(sessionData.get().split(",")).filter(e -> !e.isEmpty())
-                    .parallel().map(CacheManager.GetCache(ws)::GetTrimmedSearchResult).collect(Collectors.toList())));
+            var post = Arrays.stream(sessionData.get().split(","))
+            .filter(e -> !e.isEmpty()).parallel().map(CacheManager.GetCache(ws)::GetTrimmedSearchResult).collect(Collectors.toList());
+
+            System.out.println("23");
+            System.out.println(post);
+            var arrPost = post.toArray(new CompletableFuture[post.size()]);
+
+            System.out.println("33");
+            System.out.println(arrPost);
+
+            return CompletableFuture.allOf(arrPost).thenApply(v -> post.stream().map(CompletableFuture::join).collect(Collectors.toList())).thenApply(res -> {
+                System.out.println("43");
+                System.out.println(res);
+
+
+                return ok(views.html.index.render(res));
+            });
+            // return CompletableFuture.allOf(post)
+            //     .thenApply((List<QuerySearchResult> a) -> {
+            //     return ok(views.html.index.render(a));
+            // });
+            // return CompletableFuture.allOf(Arrays
+            //     .stream(sessionData.get().split(","))
+            //     .filter(e -> !e.isEmpty())
+            //     .parallel()
+            //     .map(CacheManager.GetCache(ws)::GetTrimmedSearchResult)
+            //     .collect(Collectors.toList())
+            //     .toArray(new CompletableFuture[post.s])
+            // ).thenApply((List<QuerySearchResult> a)-> {
+            //     return ok(views.html.index.render(a));
+            // });
         }
     }
 
