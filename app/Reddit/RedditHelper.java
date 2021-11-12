@@ -31,6 +31,7 @@ public class RedditHelper {
     req.addQueryParameter("q", "");
     req.addQueryParameter("subreddit", sr);
     req.addQueryParameter("over_18", "false");
+    req.addQueryParameter("fields", "title,author,selftext,subreddit,author_fullname,author_is_blocker,author_premium");
 
     return req.get().thenApply((WSResponse res) -> {
       try {
@@ -53,6 +54,7 @@ public class RedditHelper {
     req.addQueryParameter("q", "");
     req.addQueryParameter("author", author);
     req.addQueryParameter("over_18", "false");
+    req.addQueryParameter("fields", "title,author,selftext,subreddit,author_fullname,author_is_blocker,author_premium");
 
     return req.get().thenApply((WSResponse res) -> {
       try {
@@ -76,6 +78,7 @@ public class RedditHelper {
     WSRequest req = ws.url(endpoint + "/submission");
     req.addQueryParameter("q", query);
     req.addQueryParameter("over_18", "false");
+    req.addQueryParameter("fields", "title,author,selftext,subreddit,author_fullname,author_is_blocker,author_premium");
     // req.addQueryParameter("size", "100");
 
     return req.get().thenApply((WSResponse res) -> {
