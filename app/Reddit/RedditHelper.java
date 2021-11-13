@@ -44,7 +44,6 @@ public class RedditHelper {
         List<SearchResult> postList = new ArrayList<SearchResult>();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         postList = Arrays.asList(mapper.readValue(res.asJson().get("data").toString(), SearchResult[].class));
-        System.out.println(postList);
         return postList;
 
       } catch (Exception e) {
@@ -65,7 +64,6 @@ public class RedditHelper {
         List<SearchResult> postList = new ArrayList<SearchResult>();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         postList = Arrays.asList(mapper.readValue(res.asJson().get("data").toString(), SearchResult[].class));
-        System.out.println(postList);
         return postList;
 
       } catch (Exception e) {
@@ -80,17 +78,15 @@ public class RedditHelper {
 
     WSRequest req = this.getWSInstance();
     req.addQueryParameter("q", query);
-    req.addQueryParameter("size", "250");
+    req.addQueryParameter("size", "50");
 
     return req.get().thenApply((WSResponse res) -> {
       try {
 
-        System.out.println(res.asJson().get("data"));
         ObjectMapper mapper = new ObjectMapper();
         List<SearchResult> postList = new ArrayList<SearchResult>();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         postList = Arrays.asList(mapper.readValue(res.asJson().get("data").toString(), SearchResult[].class));
-        System.out.println(postList);
         return postList;
 
       } catch (Exception e) {
