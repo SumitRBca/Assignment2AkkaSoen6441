@@ -2,34 +2,34 @@
 @import helper._
 
 @main("Welcome") {
-  <div class="search-wrapper">
+  <div class="container">
 
-    <div class="searchResultBox">
-      <h3 class="search-wrapper__heading">Reddit Word Stats</h3>
-      <div style="text-align: left; padding-left: 10px">
-        <a href="/">Go Back</a><br/>
-        <h3 style="display: inline-block">Search terms:</h3>
-        <p style="display: inline-block">
-          @record.getSearchTerm()
-        </p>
+    <a href="/">Go Back</a><br/><br/>
 
-        <table>
-          <thead>
+    <h2 class="title">Word Stats</h2>
+    <h3 class="subtitle is-5">
+      @record.getSearchTerm()
+    </h3>
+
+
+    <div class="table-container">
+      <table class="table is-hoverable is-bordered">
+        <thead>
+          <tr>
+            <th>Frequency</th>
+            <th>Words used</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for(item <- record.getAnalytics()) {
             <tr>
-              <th>Key</th>
-              <th>Value</th>
+              <td>@item.getValue()</td>
+              <td>@item.getKey()</td>
             </tr>
-          </thead>
-          <tbody>
-            @for(item <- record.getAnalytics()) {
-              <tr>
-                <td>@item.getKey()</td>
-                <td>@item.getValue()</td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
+          }
+        </tbody>
+      </table>
     </div>
+
   </div>
 }

@@ -2,51 +2,62 @@
 @import helper._
 
 @main("Welcome") {
-  <div class="search-wrapper">
+  <div class="container search-wrapper">
     <div class="search-wrapper__box">
-      <h3 class="search-wrapper__heading">Reddit Analysis</h3>
+      <h2 class="title">Redditlytics</h2>
       <form class="search-form" action="#" method="GET">
         <input
           autofocus
           name="q"
           type="text"
-          class="search-wrapper__input"
+          class="input is-primary"
           placeholder="Enter Search Term"
           id="searchBox"
         />
-        <button class="search-wrapper__action" id="go">Search</button>
+        <button class="button is-normal ml-2" id="go">Search</button>
       </form>
     </div>
   </div>
 
   @for(record <- data) {
-    <div class="searchResultBox">
-      <div style="text-align: left; padding-left: 10px">
-        <h3 style="display: inline-block">Search terms:</h3>
-        <a style="display: inline-block" href="/stats/@record.getSearchTerm()">
+    <section class="searchResultBox">
+      <h3 class="subtitle is-5 has-text-weight-bold">
+        Search terms:
+        <a href="/stats/@record.getSearchTerm()">
           @record.getSearchTerm()
         </a>
+      </h3>
 
-        <table>
+      <div class="table-container">
+        <table class="table is-hoverable is-fullwidth is-bordered">
           <thead>
             <tr>
               <th>Title</th>
+              <th>Description</th>
               <th>Author</th>
               <th>Subreddit</th>
-              <th>Description</th>
             </tr>
           </thead>
-          @for(post <- record.getData()) {
-            <tr>
-              <td>@post.title</td>
-              <td><a href="/user/@post.author">@post.author</a></td>
-              <td><a href="/thread/@post.subreddit">@post.subreddit</a></td>
-              <td>@post.selftext</td>
-            </tr>
-          }
+          <tbody>
+            @for(post <- record.getData()) {
+              <tr>
+                <td>@post.title</td>
+                <td>
+                  @if(post.selftext.isEmpty()) {
+                    -
+                  } else {
+                    @post.selftext
+                  }
+                </td>
+                <td><a href="/user/@post.author">@post.author</a></td>
+                <td><a href="/thread/@post.subreddit">@post.subreddit</a></td>
+              </tr>
+            }
           </tbody>
         </table>
       </div>
-    </div>
+
+      <hr />
+    </section>
   }
 }
