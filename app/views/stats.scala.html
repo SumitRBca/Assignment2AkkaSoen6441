@@ -13,7 +13,7 @@
 
 
     <div class="table-container">
-      <table class="table is-hoverable is-bordered">
+      <table class="table is-hoverable is-bordered break-td">
         <thead>
           <tr>
             <th>Frequency</th>
@@ -31,5 +31,10 @@
       </table>
     </div>
 
+    @if(!record.getAnalytics.isEmpty()) {
+      <div class="is-flex is-justify-content-center">
+        <button class="button" onclick="window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })">Go to top</button>
+      </div>
+    }
   </div>
 }

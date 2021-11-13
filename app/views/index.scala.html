@@ -2,62 +2,70 @@
 @import helper._
 
 @main("Welcome") {
-  <div class="container search-wrapper">
-    <div class="search-wrapper__box">
-      <h2 class="title">Redditlytics</h2>
-      <form class="search-form" action="#" method="GET">
-        <input
-          autofocus
-          name="q"
-          type="text"
-          class="input is-primary"
-          placeholder="Enter Search Term"
-          id="searchBox"
-        />
-        <button class="button is-normal ml-2" id="go">Search</button>
-      </form>
-    </div>
-  </div>
-
-  @for(record <- data) {
-    <section class="searchResultBox">
-      <h3 class="subtitle is-5 has-text-weight-bold">
-        Search terms:
-        <a href="/stats/@record.getSearchTerm()">
-          @record.getSearchTerm()
-        </a>
-      </h3>
-
-      <div class="table-container">
-        <table class="table is-hoverable is-fullwidth is-bordered">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Description</th>
-              <th>Author</th>
-              <th>Subreddit</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for(post <- record.getData()) {
-              <tr>
-                <td>@post.title</td>
-                <td>
-                  @if(post.selftext.isEmpty()) {
-                    -
-                  } else {
-                    @post.selftext
-                  }
-                </td>
-                <td><a href="/user/@post.author">@post.author</a></td>
-                <td><a href="/thread/@post.subreddit">@post.subreddit</a></td>
-              </tr>
-            }
-          </tbody>
-        </table>
+  <div class="container">
+    <div class="search-wrapper">
+      <div class="search-wrapper__box">
+        <h2 class="title">Redditlytics</h2>
+        <form class="search-form" action="#" method="GET">
+          <input
+            autofocus
+            name="q"
+            type="text"
+            class="input is-primary"
+            placeholder="Enter Search Term"
+            id="searchBox"
+          />
+          <button class="button is-normal ml-2" id="go">Search</button>
+        </form>
       </div>
+    </div>
 
-      <hr />
-    </section>
-  }
+    @for(record <- data) {
+      <section class="searchResultBox">
+        <h3 class="subtitle is-5 has-text-weight-bold">
+          Search terms:
+          <a href="/stats/@record.getSearchTerm()">
+            @record.getSearchTerm()
+          </a>
+        </h3>
+
+        <div class="table-container">
+          <table class="table is-hoverable is-fullwidth is-bordered break-td">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Author</th>
+                <th>Subreddit</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for(post <- record.getData()) {
+                <tr>
+                  <td>@post.title</td>
+                  <td>
+                    @if(post.selftext.isEmpty()) {
+                      -
+                    } else {
+                      @post.selftext
+                    }
+                  </td>
+                  <td><a href="/user/@post.author">@post.author</a></td>
+                  <td><a href="/thread/@post.subreddit">@post.subreddit</a></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <hr />
+      </section>
+    }
+
+    @if(!data.isEmpty()) {
+      <div class="is-flex is-justify-content-center">
+        <button class="button" onclick="window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })">Go to top</button>
+      </div>
+    }
+  </div>
 }
