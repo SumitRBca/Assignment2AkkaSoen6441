@@ -42,7 +42,7 @@ public class HomeController extends Controller implements WSBodyReadables, WSBod
             return CompletableFuture.supplyAsync(() -> ok(views.html.index.render(new ArrayList<QuerySearchResult>())));
         } else {
             var post = Arrays.stream(sessionData.get().split(","))
-            .filter(e -> !e.isEmpty()).distinct().limit(10).parallel().map(CacheManager.GetCache(ws)::GetTrimmedSearchResult).collect(Collectors.toList());
+            .filter(e -> !e.isEmpty()).map(k -> k.toLowerCase().trim()).distinct().limit(10).parallel().map(CacheManager.GetCache(ws)::GetTrimmedSearchResult).collect(Collectors.toList());
             var arrPost = post.toArray(new CompletableFuture[post.size()]);
             return CompletableFuture.allOf(arrPost).thenApply(v -> post.stream().map(CompletableFuture::join).collect(Collectors.toList())).thenApply(res -> {
                 return ok(views.html.index.render(res));
