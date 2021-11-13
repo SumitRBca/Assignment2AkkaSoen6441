@@ -44,6 +44,7 @@ public class CacheManager {
       return AddToCache(keyTerm).thenApply((List<SearchResult> a) -> {
         var returnData = new QuerySearchResult(keyTerm);
         returnData.setKeyTermData(results.get(keyTerm).getAllPosts().stream().limit(10).collect(Collectors.toList()));
+        returnData.setAnalytics(results.get(keyTerm).getAnalyticsData());
         return returnData;
       }).toCompletableFuture();
     }
@@ -51,6 +52,7 @@ public class CacheManager {
     return CompletableFuture.supplyAsync(() -> {
       var returnData = new QuerySearchResult(keyTerm);
       returnData.setKeyTermData(results.get(keyTerm).getAllPosts().stream().limit(10).collect(Collectors.toList()));
+      returnData.setAnalytics(results.get(keyTerm).getAnalyticsData());
       return returnData;
     });
   }

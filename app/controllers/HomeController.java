@@ -68,4 +68,10 @@ public class HomeController extends Controller implements WSBodyReadables, WSBod
             return ok(views.html.profile.render(result));
         });
     }
+
+    public CompletableFuture<Result> searchStats(String query, Http.Request request) {
+        return CacheManager.GetCache(ws).GetTrimmedSearchResult((query)).thenApply((result) -> {
+            return ok(views.html.stats.render(result));
+        });
+    }
 }

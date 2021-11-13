@@ -40,19 +40,28 @@ public class QuerySearchResult {
   }
 
   private String sanitizeData(String content) {
-    return content.replace(",", "").trim();
+    return content
+      .trim()
+      .toLowerCase()
+      .replace(",", "")
+      .replace("\"", "")
+      .replace("!", "")
+      .replace("?", "")
+      .replace(":", "")
+      .replace(".", "")
+      .replace("(", "")
+      .replace(")", "")
+      .replace("-", "");
   }
 
   public CompletionStage<List<SearchResult>> PopulateData(RedditHelper helper) {
     var response = helper.getSearchResult(this.searchTerm);
     return response.thenApply((List<SearchResult> posts) -> {
       this.allPosts = posts;
-      var analytics = new HashMap<String, Integer>();
 
       posts
         .stream()
-        .map((d) -> d.title + " " + d.selftext)
-        .map(k -> k.split(" "))
+        .map((d) -> (d.title + " " + d.selftext).split(" "))
         .flatMap(Arrays::stream)
         .map(this::sanitizeData)
         .filter(key -> key.length() > 4 && Arrays.stream(IGNORE_WORDS).anyMatch(x -> x != key))
@@ -64,10 +73,6 @@ public class QuerySearchResult {
             analytics.put(key, 1);
           }
         });
-
-      System.out.println(analytics);
-
-      // this.analytics = analytics.entrySet().stream().sorted((k1, k2) -> -k1.getValue().compareTo(k2.getValue())).collect(Collectors.toList());
 
       return posts;
     });
@@ -97,20 +102,20 @@ public class QuerySearchResult {
     return this.posts;
   }
 
-  // public List<Map.Entry<String,Integer>> getAnalytics() {
-  public HashMap<String,Integer> getAnalytics() {
-    // var analyticsData = analytics.entrySet().stream().sorted((k1, k2) -> {
-    //   return -k1.getValue().compareTo(k2.getValue());
-    // }).collect(Collectors.toList());
+  public void setAnalytics(HashMap<String, Integer> analytics) {
+    this.analytics = analytics;
+  }
 
-    System.out.println(analytics);
-    // var analyticsData = this.analytics
-    //   .entrySet()
-    //   .stream()
-    //   .sorted((k1, k2) -> -k1.getValue().compareTo(k2.getValue()));
-    //   // .collect(Collectors.toList());
+  public HashMap<String, Integer> getAnalyticsData() {
+    return this.analytics;
+  }
 
-    return analytics;
+  public List<Map.Entry<String,Integer>> getAnalytics() {
+    return analytics
+      .entrySet()
+      .stream()
+      .sorted((k1, k2) -> -k1.getValue().compareTo(k2.getValue()))
+      .collect(Collectors.toList());
   }
 
   public void setKeyTermData(List<SearchResult> posts) {
