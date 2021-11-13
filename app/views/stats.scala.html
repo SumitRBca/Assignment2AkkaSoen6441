@@ -11,30 +11,31 @@
       @record.getSearchTerm()
     </h3>
 
-
-    <div class="table-container">
-      <table class="table is-hoverable is-bordered break-td">
-        <thead>
-          <tr>
-            <th>Frequency</th>
-            <th>Words used</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for(item <- record.getAnalytics()) {
-            <tr>
-              <td>@item.getValue()</td>
-              <td>@item.getKey()</td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-
     @if(!record.getAnalytics.isEmpty()) {
+      <div class="table-container">
+        <table class="table is-hoverable is-bordered break-td">
+          <thead>
+            <tr>
+              <th>Frequency</th>
+              <th>Words used</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for(item <- record.getAnalytics()) {
+              <tr>
+                <td>@item.getValue()</td>
+                <td>@item.getKey()</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
       <div class="is-flex is-justify-content-center">
         <button class="button" onclick="window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })">Go to top</button>
       </div>
+    } else {
+      <h4 class="subtitle is-6">No results found</h4>
     }
   </div>
 }

@@ -7,33 +7,38 @@
 
     <h2 class="title">Subreddit</h2>
     <h3 class="subtitle is-5">r/@data.getSearchTerm()</h3>
-    <div class="table-container">
-      <table class="table is-hoverable is-fullwidth is-bordered break-td">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Author</th>
-            <th>Subreddit</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for(post <- data.getData()) {
+
+    @if(!data.getData().isEmpty()) {
+      <div class="table-container">
+        <table class="table is-hoverable is-fullwidth is-bordered break-td">
+          <thead>
             <tr>
-              <td>@post.title</td>
-              <td>
-                @if(post.selftext.isEmpty()) {
-                  -
-                } else {
-                  @post.selftext
-                }
-              </td>
-              <td><a href="/user/@post.author">@post.author</a></td>
-              <td><a href="/thread/@post.subreddit">@post.subreddit</a></td>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Author</th>
+              <th>Subreddit</th>
             </tr>
-          }
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            @for(post <- data.getData()) {
+              <tr>
+                <td>@post.title</td>
+                <td>
+                  @if(post.selftext.isEmpty()) {
+                    -
+                  } else {
+                    @post.selftext
+                  }
+                </td>
+                <td><a href="/user/@post.author">@post.author</a></td>
+                <td><a href="/thread/@post.subreddit">@post.subreddit</a></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } else {
+      <h4 class="subtitle is-6">No results found</h4>
+    }
   </div>
 }
