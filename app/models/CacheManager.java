@@ -27,10 +27,10 @@ public class CacheManager {
   private CacheManager() {
   }
 
-  public static CacheManager GetCache(WSClient ws){
+  public static CacheManager GetCache(WSClient ws, String endpoint){
     if (cache==null) {
       cache = new CacheManager();
-      helper = new RedditHelper(ws);
+      helper = new RedditHelper(ws, endpoint);
       results = new HashMap<>();
       userResults = new HashMap<>();
       threadResults = new HashMap<>();

@@ -16,11 +16,11 @@ import com.fasterxml.jackson.databind.*;
 
 public class RedditHelper {
   private final WSClient ws;
+  private final String endpoint;
 
-  private static String endpoint = "https://api.pushshift.io/reddit/search";
-
-  public RedditHelper(WSClient ws) {
+  public RedditHelper(WSClient ws, String endpoint) {
     this.ws = ws;
+    this.endpoint = endpoint;
   }
 
   public WSRequest getWSInstance() {
