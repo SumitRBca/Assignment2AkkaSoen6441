@@ -13,7 +13,6 @@ import play.libs.ws.*;
 import play.api.Application;
 import java.util.concurrent.CompletionStage;
 import com.fasterxml.jackson.databind.*;
-// import play.libs.Json;
 
 public class RedditHelper {
   private final WSClient ws;
@@ -36,6 +35,7 @@ public class RedditHelper {
     WSRequest req = this.getWSInstance();
     req.addQueryParameter("q", "");
     req.addQueryParameter("subreddit", sr);
+    req.addQueryParameter("size", "10");
 
 
     return req.get().thenApply((WSResponse res) -> {
@@ -57,6 +57,7 @@ public class RedditHelper {
     WSRequest req = this.getWSInstance();
     req.addQueryParameter("q", "");
     req.addQueryParameter("author", author);
+    req.addQueryParameter("size", "10");
 
     return req.get().thenApply((WSResponse res) -> {
       try {

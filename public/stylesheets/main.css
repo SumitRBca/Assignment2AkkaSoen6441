@@ -26,6 +26,12 @@ td {
   justify-content: center;
 }
 
+.search-form {
+  margin-bottom: 1em;
+  display: flex;
+  justify-content: center;
+}
+
 .search-wrapper__box {
   border: 2px solid black;
   height: fit-content;
