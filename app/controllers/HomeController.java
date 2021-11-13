@@ -65,7 +65,7 @@ public class HomeController extends Controller implements WSBodyReadables, WSBod
 
     public CompletableFuture<Result> searchThread(String subreddit, Http.Request request) {
         return CacheManager.GetCache(ws).GetThreadInfo((subreddit)).thenApply((result) -> {
-            return ok(views.html.profile.render(result));
+            return ok(views.html.thread.render(result));
         });
     }
 

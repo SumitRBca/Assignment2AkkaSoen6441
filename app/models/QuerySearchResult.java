@@ -23,7 +23,6 @@ public class QuerySearchResult {
   private String searchTerm;
   private List<SearchResult> posts;
   private List<SearchResult> allPosts;
-  // private List<Map.Entry<String,Integer>> analytics;
   private HashMap<String, Integer> analytics;
   private static String[] IGNORE_WORDS = new String[] { "the", "is", "in", "for", "where", "when", "to", "at" };
 
@@ -32,7 +31,6 @@ public class QuerySearchResult {
     this.posts = new ArrayList<>();
     this.allPosts = new ArrayList<>();
     this.analytics = new HashMap<String, Integer>();
-    // this.analytics = new ArrayList<>();
   }
 
   public String getSearchTerm() {
@@ -121,8 +119,4 @@ public class QuerySearchResult {
   public void setKeyTermData(List<SearchResult> posts) {
     this.posts = posts;
   }
-
-  // private SearchResult mapKeyTermData(SearchResult e){
-  //   return new SearchResult(e.title, e.author, e.body, e.subreddit);
-  // }
 }
