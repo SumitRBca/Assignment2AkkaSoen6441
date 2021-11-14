@@ -23,7 +23,7 @@ public class RedditHelper {
     this.endpoint = endpoint;
   }
 
-  public WSRequest getWSInstance() {
+  private WSRequest getWSInstance() {
     WSRequest req = ws.url(endpoint + "/submission");
     req.addQueryParameter("over_18", "false");
     return req;
