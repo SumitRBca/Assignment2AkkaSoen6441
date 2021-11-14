@@ -57,17 +57,6 @@ public class HomeControllerTest extends WithApplication {
         CacheManager.GetCache(ws, "");
     }
 
-    // @After
-    // public void tearDown() throws IOException {
-    //     try {
-    //         ws.close();
-    //     } catch(Exception err) {
-    //         err.printStackTrace();
-    //     }finally {
-    //         server.stop();
-    //     }
-    // }
-
     @Test
     public void testIndex() {
         Http.RequestBuilder request = new Http.RequestBuilder()
@@ -97,6 +86,18 @@ public class HomeControllerTest extends WithApplication {
                 .uri("/");
 
         request.session("searchedTerms", "test");
+
+        Result result = route(app, request);
+        assertEquals(OK, result.status());
+    }
+
+    @Test
+    public void withMultipleKeysAndEmptyDataTest() {
+        Http.RequestBuilder request = new Http.RequestBuilder()
+                .method(GET)
+                .uri("/");
+
+        request.session("searchedTerms", "test,,db, ");
 
         Result result = route(app, request);
         assertEquals(OK, result.status());
