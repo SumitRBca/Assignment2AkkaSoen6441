@@ -30,8 +30,6 @@ public class RedditHelper {
   }
 
   public CompletionStage<List<SearchResult>> getSubredditPosts(String sr) {
-    System.out.println("thread --" + sr);
-
     WSRequest req = this.getWSInstance();
     req.addQueryParameter("q", "");
     req.addQueryParameter("subreddit", sr);
@@ -75,8 +73,6 @@ public class RedditHelper {
   }
 
   public CompletionStage<List<SearchResult>> getSearchResult(String query) {
-    System.out.println("query --" + query);
-
     WSRequest req = this.getWSInstance();
     req.addQueryParameter("q", query);
     req.addQueryParameter("size", "50");

@@ -41,18 +41,14 @@ public class HomeControllerTest extends WithApplication {
             RoutingDsl.fromComponents(components)
             .GET("/submission")
             .routingTo(request -> {
-                // System.out.println(request.queryString());
                 if (request.queryString().containsKey("subreddit")) {
-                    System.out.println("thread --" + request.queryString().get("subreddit"));
                     return ok().sendResource("subreddit.json");
                 }
 
                 if (request.queryString().containsKey("author")) {
-                    System.out.println("author --" + request.queryString().get("author"));
                     return ok().sendResource("user.json");
                 }
 
-                System.out.println("general --\n");
                 return ok().sendResource("general.json");
             })
             .build());

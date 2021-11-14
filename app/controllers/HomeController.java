@@ -38,7 +38,6 @@ public class HomeController extends Controller implements WSBodyReadables, WSBod
      */
     public CompletableFuture<Result> index(Http.Request request) {
         var sessionData = request.session().get("searchedTerms");
-        System.out.println(sessionData);
 
         if (!sessionData.isPresent()) {
             return CompletableFuture.supplyAsync(() -> ok(views.html.index.render(new ArrayList<QuerySearchResult>())));
