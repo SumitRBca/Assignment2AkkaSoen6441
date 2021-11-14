@@ -12,6 +12,8 @@ import play.api.libs.json.Json;
 import play.libs.ws.*;
 import play.api.Application;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
+
 import com.fasterxml.jackson.databind.*;
 
 public class RedditHelper {
@@ -29,26 +31,33 @@ public class RedditHelper {
     return req;
   }
 
+  private Function<WSResponse, List<SearchResult>> formatResponse() {
+    return (WSResponse res) -> {
+      try {
+        ObjectMapper mapper = new ObjectMapper();
+        List<SearchResult> postList = new ArrayList<SearchResult>();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        postList = Arrays.asList(
+          mapper.readValue(
+            res.asJson().get("data").toString(),
+            SearchResult[].class
+          )
+        );
+        return postList;
+      } catch (Exception e) {
+        e.printStackTrace();
+        return null;
+      }
+    };
+  }
+
   public CompletionStage<List<SearchResult>> getSubredditPosts(String sr) {
     WSRequest req = this.getWSInstance();
     req.addQueryParameter("q", "");
     req.addQueryParameter("subreddit", sr);
     req.addQueryParameter("size", "10");
 
-
-    return req.get().thenApply((WSResponse res) -> {
-      try {
-        ObjectMapper mapper = new ObjectMapper();
-        List<SearchResult> postList = new ArrayList<SearchResult>();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        postList = Arrays.asList(mapper.readValue(res.asJson().get("data").toString(), SearchResult[].class));
-        return postList;
-
-      } catch (Exception e) {
-        e.printStackTrace();
-        return null;
-      }
-    });
+    return req.get().thenApply(formatResponse());
   }
 
   public CompletionStage<List<SearchResult>> getUserPosts(String author) {
@@ -57,19 +66,7 @@ public class RedditHelper {
     req.addQueryParameter("author", author);
     req.addQueryParameter("size", "10");
 
-    return req.get().thenApply((WSResponse res) -> {
-      try {
-        ObjectMapper mapper = new ObjectMapper();
-        List<SearchResult> postList = new ArrayList<SearchResult>();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        postList = Arrays.asList(mapper.readValue(res.asJson().get("data").toString(), SearchResult[].class));
-        return postList;
-
-      } catch (Exception e) {
-        e.printStackTrace();
-        return null;
-      }
-    });
+    return req.get().thenApply(formatResponse());
   }
 
   public CompletionStage<List<SearchResult>> getSearchResult(String query) {
@@ -77,19 +74,6 @@ public class RedditHelper {
     req.addQueryParameter("q", query);
     req.addQueryParameter("size", "50");
 
-    return req.get().thenApply((WSResponse res) -> {
-      try {
-
-        ObjectMapper mapper = new ObjectMapper();
-        List<SearchResult> postList = new ArrayList<SearchResult>();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        postList = Arrays.asList(mapper.readValue(res.asJson().get("data").toString(), SearchResult[].class));
-        return postList;
-
-      } catch (Exception e) {
-        e.printStackTrace();
-        return null;
-      }
-    });
+    return req.get().thenApply(formatResponse());
   }
 }
