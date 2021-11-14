@@ -1,4 +1,4 @@
-name := """play-java-hello-world-tutorial"""
+name := """redditlyzer"""
 organization := "com.example"
 
 version := "1.0-SNAPSHOT"
