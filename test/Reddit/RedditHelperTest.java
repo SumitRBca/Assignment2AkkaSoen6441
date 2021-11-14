@@ -43,6 +43,16 @@ public class RedditHelperTest {
   }
 
   @Test
+  public void handleErrorTest() {
+    List<SearchResult> result = new RedditHelper(ws, "https://www.github.com")
+      .getSubredditPosts("test")
+      .toCompletableFuture()
+      .join();
+
+    Assert.assertEquals(null, result);
+  }
+
+  @Test
   public void getSubredditPostsTest() {
     List<SearchResult> result = redditHelper
       .getSubredditPosts("test")

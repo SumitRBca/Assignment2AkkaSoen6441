@@ -31,7 +31,7 @@ public class RedditHelper {
     return req;
   }
 
-  private Function<WSResponse, List<SearchResult>> formatResponse() {
+  private Function<WSResponse, List<SearchResult>> formatResponse() throws NullPointerException {
     return (WSResponse res) -> {
       try {
         ObjectMapper mapper = new ObjectMapper();
@@ -45,7 +45,6 @@ public class RedditHelper {
         );
         return postList;
       } catch (Exception e) {
-        e.printStackTrace();
         return null;
       }
     };
