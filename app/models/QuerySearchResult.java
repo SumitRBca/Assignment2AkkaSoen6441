@@ -19,6 +19,12 @@ import play.libs.Json;
 
 import static java.util.stream.Collectors.*;
 
+/**
+ * This class will store all the data regarding all the Reddit Posts pertaining to a particular search term.
+ * @author Saghana Mahesh Sarma
+ * @author Sumit Ramesh Bhiungade
+ * @author Jai Sahni
+ * */
 public class QuerySearchResult {
   private String searchTerm;
   private List<SearchResult> posts;
@@ -33,10 +39,25 @@ public class QuerySearchResult {
     this.analytics = new HashMap<String, Integer>();
   }
 
+  /**
+   * This is the getter method to get the search term associated with the search results
+   * @author Saghana Mahesh Sarma
+   * @author Sumit Ramesh Bhiungade
+   * @author Jai Sahni
+   * @return The search term associated with this search result
+   * */
+
   public String getSearchTerm() {
     return searchTerm;
   }
 
+  /**
+   * This is the method to clean the content of unrequired symbols
+   * @author Saghana Mahesh Sarma
+   * @author Sumit Ramesh Bhiungade
+   * @author Jai Sahni
+   * @return The filtered content
+   * */
   private String sanitizeData(String content) {
     return content
       .trim()
@@ -52,6 +73,16 @@ public class QuerySearchResult {
       .replace("-", "");
   }
 
+  /**
+   * This method is used to fetch the required data associated with a search term from Reddit, map it to the model class {@link SearchResult},
+   * <p>
+   * This method also used to perform the word stats on the query .
+   * @author Saghana Mahesh Sarma
+   * @author Sumit Ramesh Bhiungade
+   * @author Jai Sahni
+   * @param helper - This is the corresponding implementation you want to use to fetch data
+   * @return The Reddit posts under a given search term
+   * */
   public CompletionStage<List<SearchResult>> PopulateData(RedditHelper helper) {
     var response = helper.getSearchResult(this.searchTerm);
     return response.thenApply((List<SearchResult> posts) -> {
@@ -76,6 +107,12 @@ public class QuerySearchResult {
     });
   }
 
+  /**
+   * This method used to fetch the reddit posts under a particular subreddits
+   * @author Jai Sahni
+   * @param helper - This is the corresponding implementation you want to use to fetch comments
+   * @return The subreddit posts
+   */
   public CompletionStage<List<SearchResult>> PopulateThread(RedditHelper helper) {
     var response = helper.getSubredditPosts(this.searchTerm);
     return response.thenApply((List<SearchResult> posts) -> {
@@ -83,7 +120,12 @@ public class QuerySearchResult {
       return posts;
     });
   }
-
+  /**
+   * This method used to fetch the user info of the author of a reddit post
+   * @author Saghana Mahesh Sarma
+   * @param helper - This is the corresponding implementation you want to use to fetch comments
+   * @return The information of the author
+   */
   public CompletionStage<List<SearchResult>> PopulateUser(RedditHelper helper) {
     var response = helper.getUserPosts(this.searchTerm);
     return response.thenApply((List<SearchResult> posts) -> {
@@ -91,11 +133,17 @@ public class QuerySearchResult {
       return posts;
     });
   }
-
+  /**
+   * This method is a getter method that returns all reddit posts
+   * @return all reddit posts
+   */
   public List<SearchResult> getAllPosts(){
     return this.allPosts;
   }
-
+  /**
+   * This is the getter method to return all the posts along with their data under a given search term
+   * @return A list of all Reddit data({@link SearchResult})
+   * */
   public List<SearchResult> getData(){
     return this.posts;
   }
@@ -116,6 +164,11 @@ public class QuerySearchResult {
       .collect(Collectors.toList());
   }
 
+  /**
+   * This is setter method that can be used to set the reddit data for given search term
+   * @author Saghana Mahesh Sarma
+   * @param posts - List of reddit data({@link SearchResult}) for given search term
+   * */
   public void setKeyTermData(List<SearchResult> posts) {
     this.posts = posts;
   }
