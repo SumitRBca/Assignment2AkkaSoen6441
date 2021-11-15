@@ -31,7 +31,10 @@ import static play.mvc.Results.*;
 
 import Reddit.RedditHelper;
 
-
+/**
+ * This test class is used for testing the methods for querying the search results in various modules
+ * @author Saghana Mahesh Sarma
+ * */
 public class QuerySearchResultTest {
 
   private WSClient ws;
@@ -70,6 +73,10 @@ public class QuerySearchResultTest {
     helper = new RedditHelper(ws, "");
   }
 
+  /**
+   * This method is used for testing the setter that stores analytics data
+   * @author Saghana Mahesh Sarma
+   */
   @Test
   public void setAnalyticsTest() {
     HashMap<String, Integer> map = new HashMap<>();
@@ -80,7 +87,10 @@ public class QuerySearchResultTest {
     Assert.assertEquals("test", result.getAnalytics().get(0).getKey());
   }
 
-
+  /**
+   * This method is used for testing the getter method that returns the data of the analytics in the hashmap
+   * @author Saghana Mahesh Sarma
+   */
   @Test
   public void getAnalyticsTest() {
     HashMap<String, Integer> map = new HashMap<>();
@@ -91,6 +101,10 @@ public class QuerySearchResultTest {
     Assert.assertTrue(100 == result.getAnalytics().get(0).getValue());
   }
 
+  /**
+   * This method is used to test the frequency of the word received in analytics
+   * @author Saghana Mahesh Sarma
+   */
   @Test
   public void getAnalyticsDataTest() {
     HashMap<String, Integer> map = new HashMap<>();
@@ -100,11 +114,19 @@ public class QuerySearchResultTest {
     Assert.assertTrue(100 == result.getAnalyticsData().get("test"));
   }
 
+  /**
+   * This method is used for testing the search query
+   * @author Saghana Mahesh Sarma
+   */
   @Test
   public void getSearchTermTest() {
     Assert.assertEquals("test", result.getSearchTerm());
   }
 
+  /**
+   * This method is used to test the title of the submission for the search term
+   * @author Saghana Mahesh Sarma
+   */
   @Test
   public void setKeyTermDataTest() {
     List<SearchResult> sample = new ArrayList();
@@ -113,6 +135,10 @@ public class QuerySearchResultTest {
     Assert.assertEquals("test", sample.get(0).title);
   }
 
+  /**
+   * This method is used to test the result of submissions for the search query
+   * @author Saghana Mahesh Sarma
+   */
   @Test
   public void PopulateDataTest() {
     List<SearchResult> res = result
@@ -128,6 +154,10 @@ public class QuerySearchResultTest {
     Assert.assertEquals(res.get(0).selftext, result.getData().get(0).selftext);
   }
 
+  /**
+   * This method is used to test the result of the submissions with a sample data
+   * @author Saghana Mahesh Sarma
+   */
   @Test
   public void getDataTest() {
     List<SearchResult> sample = new ArrayList();
@@ -150,5 +180,4 @@ public class QuerySearchResultTest {
     Assert.assertEquals(expectedOp, result.getData());
     Assert.assertTrue(result.getData().size() <= 10);
   }
-
 }
