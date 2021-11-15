@@ -40,7 +40,8 @@ public class HomeControllerTest extends WithApplication {
     }
 
     /**
-     * This test method will be used to test setup.
+     * Setup mock server to listen to http requests being made from tests to route '/submission'
+     * and instantiate cache manager singleton
      * @author Sumit Ramesh Bhiungade
      * @author Saghana Mahesh Sarma
      * @author Jai Sahni

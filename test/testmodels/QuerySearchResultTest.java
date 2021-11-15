@@ -39,6 +39,13 @@ public class QuerySearchResultTest {
   private RedditHelper helper;
   private QuerySearchResult result;
 
+  /**
+   * Setup mock server to listen to http requests being made from tests to route '/submission'
+   * and instantiate WSClient, QuerySearchResult, RedditHelper Java
+   * @author Sumit Ramesh Bhiungade
+   * @author Saghana Mahesh Sarma
+   * @author Jai Sahni
+   * */
   @Before
   public void Setup() {
     server = Server.forRouter((components) ->
@@ -112,8 +119,6 @@ public class QuerySearchResultTest {
       .PopulateData(helper)
       .toCompletableFuture()
       .join();
-
-
 
     result.setKeyTermData(res.stream().limit(10).collect(Collectors.toList()));
 

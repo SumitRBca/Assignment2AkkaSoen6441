@@ -33,11 +33,12 @@ public class RedditHelperTest {
   private RedditHelper redditHelper;
 
   /**
-   * The setup method is used for testing the base url route with submission results
-   * @author Saghana Mahesh Sarma
+   * Setup mock server to listen to http requests being made from tests
+   * to route '/submission' and instantiate mock WSClient
    * @author Sumit Ramesh Bhiungade
+   * @author Saghana Mahesh Sarma
    * @author Jai Sahni
-   */
+   * */
   @Before
   public void Setup() {
     server = Server.forRouter((components) ->

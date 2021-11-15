@@ -35,6 +35,12 @@ public class CacheManagerTest {
   private WSClient ws;
   private Server server;
 
+  /**
+   * Setup mock server to listen to http requests being made from tests to route '/submission'
+   * @author Sumit Ramesh Bhiungade
+   * @author Saghana Mahesh Sarma
+   * @author Jai Sahni
+   * */
   @Before
   public void Setup() {
     server = Server.forRouter((components) ->
@@ -56,6 +62,11 @@ public class CacheManagerTest {
     ws = play.test.WSTestClient.newClient(server.httpPort());
   }
 
+  /**
+   * Check if the value set in the CacheManager is the value being returned
+   * Check if the size of the returned response is less than / equal to 10
+   * @author Saghana Mahesh Sarma
+   * */
   @Test
   public void GetTrimmedSearchResult_Test() {
     QuerySearchResult querySearchResult = new QuerySearchResult("test");
@@ -68,6 +79,11 @@ public class CacheManagerTest {
     Assert.assertTrue(querySearchResult.getData().size() <= 10);
   }
 
+  /**
+   * Check if the value set in the CacheManager for ThreadInfo is the value being returned
+   * Check if the size of the returned response is less than / equal to 10
+   * @author Saghana Mahesh Sarma
+   * */
   @Test
   public void GetThreadInfo_Test() {
     QuerySearchResult querySearchResult = new QuerySearchResult("test");
@@ -80,6 +96,11 @@ public class CacheManagerTest {
     Assert.assertTrue(querySearchResult.getData().size() <= 10);
   }
 
+  /**
+   * Check if the value set in the CacheManager for UserInfo is the value being returned
+   * Check if the size of the returned response is less than / equal to 10
+   * @author Saghana Mahesh Sarma
+   * */
   @Test
   public void GetUserInfo_Test() {
     QuerySearchResult querySearchResult = new QuerySearchResult("test");
