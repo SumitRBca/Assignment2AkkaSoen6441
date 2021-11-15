@@ -25,6 +25,10 @@ import play.routing.RoutingDsl;
 import play.server.Server;
 import static play.mvc.Results.*;
 
+/**
+ * This test file contains the test cases for HomeController
+ * application's home page.
+ */
 public class HomeControllerTest extends WithApplication {
 
     private WSClient ws;
@@ -35,6 +39,10 @@ public class HomeControllerTest extends WithApplication {
         return new GuiceApplicationBuilder().build();
     }
 
+    /**
+     * This test method will be used to test setup.
+     * @author Sumit Ramesh Bhiungade
+     * */
     @Before
     public void Setup(){
         server = Server.forRouter((components) ->
@@ -57,6 +65,10 @@ public class HomeControllerTest extends WithApplication {
         CacheManager.GetCache(ws, "");
     }
 
+    /**
+     * This test method will be used to test  index.
+     * @author Sumit Ramesh Bhiungade
+     * */
     @Test
     public void testIndex() {
         Http.RequestBuilder request = new Http.RequestBuilder()
@@ -67,6 +79,10 @@ public class HomeControllerTest extends WithApplication {
         assertEquals(OK, result.status());
     }
 
+    /**
+     * This test method will be used to test index with sessions.
+     * @author Saghana Mahesh Sarma
+     * */
     @Test
     public void testIndex_WithSession() {
         Http.RequestBuilder request = new Http.RequestBuilder()
@@ -78,7 +94,10 @@ public class HomeControllerTest extends WithApplication {
         Result result = route(app, request);
         assertEquals(OK, result.status());
     }
-
+    /**
+     * This test method will be used to test  index with sessions and empty sessions.
+     * @author Sumit Ramesh Bhiungade
+     * */
     @Test
     public void testIndex_WithSession_WithEmptySession() {
         Http.RequestBuilder request = new Http.RequestBuilder()
@@ -90,7 +109,10 @@ public class HomeControllerTest extends WithApplication {
         Result result = route(app, request);
         assertEquals(OK, result.status());
     }
-
+    /**
+     * This test method will be used to test search query for empty data.
+     * @author Saghana Mahesh Sarma
+     * */
     @Test
     public void withMultipleKeysAndEmptyDataTest() {
         Http.RequestBuilder request = new Http.RequestBuilder()
@@ -103,6 +125,10 @@ public class HomeControllerTest extends WithApplication {
         assertEquals(OK, result.status());
     }
 
+    /**
+     * This test method will be used to test search query.
+     * @author Saghana Mahesh Sarma
+     * */
     @Test
     public void searchQuery() {
         Http.RequestBuilder request = new Http.RequestBuilder()
@@ -112,7 +138,10 @@ public class HomeControllerTest extends WithApplication {
         Result result = route(app, request);
         assertEquals(HttpStatus.SC_SEE_OTHER, result.status());
     }
-
+    /**
+     * This test method will be used to test search threads.
+     * @author Jai Sahni
+     * */
     @Test
     public void searchThread() {
         Http.RequestBuilder request = new Http.RequestBuilder()
@@ -123,7 +152,10 @@ public class HomeControllerTest extends WithApplication {
         assertEquals(OK, result.status());
     }
 
-
+    /**
+     * This test method will be used to test the user
+     * @author Saghana Mahesh Sarma
+     * */
     @Test
     public void searchUser() {
         Http.RequestBuilder request = new Http.RequestBuilder()
@@ -133,7 +165,10 @@ public class HomeControllerTest extends WithApplication {
         Result result = route(app, request);
         assertEquals(OK, result.status());
     }
-
+    /**
+     * This test method will be used to test word stats on a given search query .
+     * @author Sumit Ramesh Bhiungade
+     * */
     @Test
     public void searchStats() {
         Http.RequestBuilder request = new Http.RequestBuilder()
