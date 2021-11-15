@@ -23,11 +23,18 @@ import play.routing.RoutingDsl;
 import play.server.Server;
 import static play.mvc.Results.*;
 
+/**
+ * This test class is used for testing the routes and sub-reddits posts.
+ * @author Saghana Mahesh Sarma
+ * */
 public class RedditHelperTest {
   private WSClient ws;
   private Server server;
   private RedditHelper redditHelper;
 
+  /**
+   * The setup method is used for testing the base url route with submission results
+   */
   @Before
   public void Setup() {
     server = Server.forRouter((components) ->
@@ -42,6 +49,9 @@ public class RedditHelperTest {
     this.redditHelper = new RedditHelper(ws, "");
   }
 
+  /**
+   * This handleErrorTest method is used for testing the results for an invalid URL
+   */
   @Test
   public void handleErrorTest() {
     List<SearchResult> result = new RedditHelper(ws, "https://www.github.com")
@@ -52,6 +62,9 @@ public class RedditHelperTest {
     Assert.assertEquals(null, result);
   }
 
+  /**
+   * This method is used for testing the subreddit posts with each of its following contents
+   */
   @Test
   public void getSubredditPostsTest() {
     List<SearchResult> result = redditHelper
@@ -68,6 +81,9 @@ public class RedditHelperTest {
     Assert.assertEquals("test", result.get(0).author_premium);
   }
 
+  /**
+   * This method is used for testing the user information from user profile
+   */
   @Test
   public void getUserPostsTest() {
     List<SearchResult> result = redditHelper
@@ -84,6 +100,9 @@ public class RedditHelperTest {
     Assert.assertEquals("test", result.get(0).author_premium);
   }
 
+  /**
+   * This method is used for testing the submission results
+   */
   @Test
   public void getSearchResultTest() {
     List<SearchResult> result = redditHelper
