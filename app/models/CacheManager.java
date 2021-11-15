@@ -103,8 +103,8 @@ public class CacheManager {
   }
 
   /**
-   * This method checks if the subreddit is present in the Hash Data structure already else calls the below method - AddThreadToCache
-   to retrieve the information and returns the result
+   * This method checks if the subreddit is present in the Hash Data structure already else calls the below method -
+   * AddThreadToCache to retrieve the information and returns the result
    * @author Jai Sahni
    * @param keyTerm - This is the search term for which we check if it already exists in the HashMap
    * @return {@link QuerySearchResult} object for corresponding subreddit
@@ -127,7 +127,7 @@ public class CacheManager {
   }
 
   /**
-   * This method will add subreddit information for a reddit to the cache.
+   * This method will add subreddit information for a subreddit to the cache.
    * @author Jai Sahni
    * @param keyTerm - This is the search term for which we add the corresponding result to cache
    * @return {@link SearchResult}
@@ -141,8 +141,8 @@ public class CacheManager {
   }
 
   /**
-   * This method checks if the user Id is present in the Hash Data structure already else calls the below method - AddOwnerInfoToCache
-   to retrieve the information and returns the result
+   * This method checks if the user Id is present in the Hash Data structure already else calls the below method -
+   * AddOwnerInfoToCache to retrieve the information and returns the result
    * @author Saghana Mahesh Sarma
    * @param keyTerm - This is the search term for which we check if it already exists in the HashMap
    * @return {@link QuerySearchResult} object for corresponding user
@@ -162,7 +162,7 @@ public class CacheManager {
       return returnData;
     });
   }
-  
+
   /**
    * This method will add user information for a user id to the cache.
    * @author Saghana Mahesh Sarma
