@@ -14,6 +14,11 @@ import java.util.stream.Collectors;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import static org.junit.Assert.*;
+
+/**
+ * This test method will be used to test the search results.
+ * @author Sumit Ramesh Bhiungade
+ * */
 public class SearchResultTest {
 
   @Test

@@ -114,6 +114,7 @@ public class QuerySearchResultTest {
       .join();
 
 
+
     result.setKeyTermData(res.stream().limit(10).collect(Collectors.toList()));
 
     Assert.assertEquals(res.get(0).title, result.getData().get(0).title);
