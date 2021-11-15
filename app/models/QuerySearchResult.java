@@ -133,29 +133,48 @@ public class QuerySearchResult {
       return posts;
     });
   }
+
   /**
    * This method is a getter method that returns all reddit posts
+   * @author Saghana Mahesh Sarma
    * @return all reddit posts
    */
   public List<SearchResult> getAllPosts(){
     return this.allPosts;
   }
+
   /**
    * This is the getter method to return all the posts along with their data under a given search term
+   * @author Saghana Mahesh Sarma
    * @return A list of all Reddit data({@link SearchResult})
    * */
   public List<SearchResult> getData(){
     return this.posts;
   }
 
+  /**
+   * This is a setter method that stores analytics data in the field instance
+   * @author Saghana Mahesh Sarma
+   * @param analytics HashMap of words and their frequency
+   */
   public void setAnalytics(HashMap<String, Integer> analytics) {
     this.analytics = analytics;
   }
 
+  /**
+   * This is a getter method that returns the latest analytics HashMap
+   * @author Saghana Mahesh Sarma
+   * @return analytics HashMap of words and their frequency
+   */
   public HashMap<String, Integer> getAnalyticsData() {
     return this.analytics;
   }
 
+  /**
+   * Getter method to get the formatted analytics data from the instance as a list
+   * @author Saghana Mahesh Sarma
+   * @return List of words and their frequencies
+   */
   public List<Map.Entry<String,Integer>> getAnalytics() {
     return analytics
       .entrySet()
