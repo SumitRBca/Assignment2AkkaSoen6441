@@ -42,6 +42,8 @@ public class HomeControllerTest extends WithApplication {
     /**
      * This test method will be used to test setup.
      * @author Sumit Ramesh Bhiungade
+     * @author Saghana Mahesh Sarma
+     * @author Jai Sahni
      * */
     @Before
     public void Setup(){
@@ -68,6 +70,8 @@ public class HomeControllerTest extends WithApplication {
     /**
      * This test method will be used to test  index.
      * @author Sumit Ramesh Bhiungade
+     * @author Saghana Mahesh Sarma
+     * @author Jai Sahni
      * */
     @Test
     public void testIndex() {
@@ -81,7 +85,9 @@ public class HomeControllerTest extends WithApplication {
 
     /**
      * This test method will be used to test index with sessions.
+     * @author Sumit Ramesh Bhiungade
      * @author Saghana Mahesh Sarma
+     * @author Jai Sahni
      * */
     @Test
     public void testIndex_WithSession() {
@@ -94,9 +100,12 @@ public class HomeControllerTest extends WithApplication {
         Result result = route(app, request);
         assertEquals(OK, result.status());
     }
+
     /**
      * This test method will be used to test  index with sessions and empty sessions.
      * @author Sumit Ramesh Bhiungade
+     * @author Saghana Mahesh Sarma
+     * @author Jai Sahni
      * */
     @Test
     public void testIndex_WithSession_WithEmptySession() {
@@ -109,6 +118,7 @@ public class HomeControllerTest extends WithApplication {
         Result result = route(app, request);
         assertEquals(OK, result.status());
     }
+
     /**
      * This test method will be used to test search query for empty data.
      * @author Saghana Mahesh Sarma
@@ -127,7 +137,9 @@ public class HomeControllerTest extends WithApplication {
 
     /**
      * This test method will be used to test search query.
+     * @author Sumit Ramesh Bhiungade
      * @author Saghana Mahesh Sarma
+     * @author Jai Sahni
      * */
     @Test
     public void searchQuery() {
@@ -138,6 +150,7 @@ public class HomeControllerTest extends WithApplication {
         Result result = route(app, request);
         assertEquals(HttpStatus.SC_SEE_OTHER, result.status());
     }
+
     /**
      * This test method will be used to test search threads.
      * @author Jai Sahni
@@ -154,7 +167,7 @@ public class HomeControllerTest extends WithApplication {
 
     /**
      * This test method will be used to test the user
-     * @author Saghana Mahesh Sarma
+     * @author Sumit Ramesh Bhiungade
      * */
     @Test
     public void searchUser() {
@@ -165,9 +178,10 @@ public class HomeControllerTest extends WithApplication {
         Result result = route(app, request);
         assertEquals(OK, result.status());
     }
+
     /**
      * This test method will be used to test word stats on a given search query .
-     * @author Sumit Ramesh Bhiungade
+     * @author Saghana Mahesh Sarma
      * */
     @Test
     public void searchStats() {

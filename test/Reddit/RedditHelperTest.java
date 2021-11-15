@@ -34,6 +34,9 @@ public class RedditHelperTest {
 
   /**
    * The setup method is used for testing the base url route with submission results
+   * @author Saghana Mahesh Sarma
+   * @author Sumit Ramesh Bhiungade
+   * @author Jai Sahni
    */
   @Before
   public void Setup() {
@@ -51,6 +54,7 @@ public class RedditHelperTest {
 
   /**
    * This handleErrorTest method is used for testing the results for an invalid URL
+   * @author Saghana Mahesh Sarma
    */
   @Test
   public void handleErrorTest() {
@@ -64,6 +68,7 @@ public class RedditHelperTest {
 
   /**
    * This method is used for testing the subreddit posts with each of its following contents
+   * @author Saghana Mahesh Sarma
    */
   @Test
   public void getSubredditPostsTest() {
@@ -83,6 +88,7 @@ public class RedditHelperTest {
 
   /**
    * This method is used for testing the user information from user profile
+   * @author Saghana Mahesh Sarma
    */
   @Test
   public void getUserPostsTest() {
@@ -102,6 +108,7 @@ public class RedditHelperTest {
 
   /**
    * This method is used for testing the submission results
+   * @author Saghana Mahesh Sarma
    */
   @Test
   public void getSearchResultTest() {
