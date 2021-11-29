@@ -1,7 +1,7 @@
-@(record : QuerySearchResult)
+@(record : QuerySearchResult, request: play.mvc.Http.Request )
 @import helper._
 
-@main("Welcome") {
+@main("Welcome", request) {
   <div class="container">
 
     <a href="/">Go Back</a><br/><br/>

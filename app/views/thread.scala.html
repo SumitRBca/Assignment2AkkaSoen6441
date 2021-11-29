@@ -1,7 +1,7 @@
-@(data : QuerySearchResult)
+@(data : QuerySearchResult, request: play.mvc.Http.Request)
 @import helper._
 
-@main("Subreddit") {
+@main("Subreddit", request) {
   <div class="container">
     <a href="/">Go Back</a><br/><br/>
 

@@ -1,7 +1,7 @@
-@(data : List[QuerySearchResult])
+@(data : List[QuerySearchResult], request: play.mvc.Http.Request)
 @import helper._
 
-@main("Welcome") {
+@main("Welcome", request) {
   <div class="container">
     <div class="search-wrapper">
       <div class="search-wrapper__box">

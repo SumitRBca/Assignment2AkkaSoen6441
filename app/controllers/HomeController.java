@@ -1,6 +1,7 @@
 package controllers;
 
 import models.*;
+import actors.*;
 
 import play.mvc.*;
 import java.util.ArrayList;
@@ -14,8 +15,17 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import java.io.IOException;
 
+import com.fasterxml.jackson.databind.*;
 import play.api.libs.json.Json;
 import play.libs.ws.*;
+import play.libs.F;
+
+import play.libs.streams.ActorFlow;
+import play.mvc.*;
+import akka.actor.*;
+import akka.stream.*;
+import akka.stream.javadsl.*;
+
 
 /**
  * This controller contains an action to handle HTTP requests to the
@@ -28,9 +38,14 @@ public class HomeController extends Controller implements WSBodyReadables, WSBod
     private final WSClient ws;
     private static String endpoint = "https://api.pushshift.io/reddit/search";
 
+    private final ActorSystem actorSystem;
+    private final Materializer materializer;
+
     @Inject
-    public HomeController(WSClient ws) {
+    public HomeController(WSClient ws, ActorSystem actorSystem, Materializer materializer) {
         this.ws = ws;
+        this.actorSystem = actorSystem;
+        this.materializer = materializer;
     }
 
     /**
@@ -46,7 +61,7 @@ public class HomeController extends Controller implements WSBodyReadables, WSBod
         var sessionData = request.session().get("searchedTerms");
 
         if (!sessionData.isPresent()) {
-            return CompletableFuture.supplyAsync(() -> ok(views.html.index.render(new ArrayList<QuerySearchResult>())));
+            return CompletableFuture.supplyAsync(() -> ok(views.html.index.render(new ArrayList<QuerySearchResult>(), request)));
         } else {
             var post = Arrays
                 .stream(sessionData.get().split(","))
@@ -69,7 +84,7 @@ public class HomeController extends Controller implements WSBodyReadables, WSBod
                         .map(CompletableFuture::join)
                         .collect(Collectors.toList());
                 })
-                .thenApply(res -> ok(views.html.index.render(res)));
+                .thenApply(res -> ok(views.html.index.render(res, request)));
         }
     }
 
@@ -102,7 +117,7 @@ public class HomeController extends Controller implements WSBodyReadables, WSBod
         return CacheManager
             .GetCache(ws, endpoint)
             .GetUserInfo((user))
-            .thenApply((result) -> ok(views.html.profile.render(result)));
+            .thenApply((result) -> ok(views.html.profile.render(result, request)));
     }
 
     /**
@@ -117,7 +132,7 @@ public class HomeController extends Controller implements WSBodyReadables, WSBod
         return CacheManager
             .GetCache(ws, endpoint)
             .GetThreadInfo((subreddit))
-            .thenApply((result) -> ok(views.html.thread.render(result)));
+            .thenApply((result) -> ok(views.html.thread.render(result, request)));
     }
 
     /**
@@ -132,6 +147,22 @@ public class HomeController extends Controller implements WSBodyReadables, WSBod
         return CacheManager
             .GetCache(ws, endpoint)
             .GetTrimmedSearchResult((query))
-            .thenApply((result) -> ok(views.html.stats.render(result)));
+            .thenApply((result) -> ok(views.html.stats.render(result, request)));
+    }
+
+    private CompletionStage<F.Either<Result, Flow<JsonNode, JsonNode, ?>>> createActorFlow(Http.RequestHeader request) {
+        return CompletableFuture.completedFuture(
+            F.Either.Right(createFlowForActor())
+        );
+    }
+
+    private Flow<JsonNode, JsonNode, ?> createFlowForActor() {
+        return ActorFlow.actorRef(out -> Messenger.props(out), actorSystem, materializer);
+    }
+
+    public WebSocket socket() {
+        System.out.println("Connected to socket!");
+        return WebSocket.Json
+            .acceptOrResult(this::createActorFlow);
     }
 }
