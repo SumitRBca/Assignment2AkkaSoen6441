@@ -9,11 +9,16 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import akka.http.javadsl.Http;
 import akka.http.javadsl.marshallers.jackson.Jackson;
-import akka.http.javadsl.model.HttpMessage;
-import akka.http.javadsl.model.HttpRequest;
-import akka.http.javadsl.model.HttpResponse;
 import akka.stream.Materializer;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import Reddit.RedditHelper;
+import play.libs.ws.*;
+import play.libs.Json;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,15 +28,17 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Messenger extends AbstractActor {
     private LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
+    private RedditHelper helper;
 
     private ActorRef out;
 
-    public Messenger(ActorRef out) {
+    public Messenger(ActorRef out, WSClient ws, String endpoint) {
         this.out = out;
+        this.helper = new RedditHelper(ws, endpoint);
     }
 
-    public static Props props(ActorRef out) {
-        return Props.create(Messenger.class, () -> new Messenger(out));
+    public static Props props(ActorRef out, WSClient ws, String endpoint) {
+        return Props.create(Messenger.class, () -> new Messenger(out, ws, endpoint));
     }
 
     @Override
@@ -50,8 +57,29 @@ public class Messenger extends AbstractActor {
         );
     }
 
-    private void onSendMessage(JsonNode jsonNode) {
+    private void onSendMessage(JsonNode jsonNode) throws JsonProcessingException {
         System.out.println("New");
+        System.out.println(jsonNode);
+
+        var type = jsonNode.get("type").asText();
+        var query = jsonNode.get("query").asText();
+
+        System.out.println("type: " + type);
+        System.out.println("query: " + query);
+
+        final ObjectNode response = Json.newObject();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        response.put("type", type);
+        response.put("query", query);
+
+        var value = this.helper
+            .getSubredditPosts(query)
+            .toCompletableFuture()
+            .join();
+
+        response.put("data", objectMapper.writeValueAsString(value));
+        out.tell(response, self());
     }
 
     @Override

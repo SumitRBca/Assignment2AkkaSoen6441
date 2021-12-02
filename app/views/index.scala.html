@@ -22,7 +22,7 @@
     </div>
 
     @for(record <- data) {
-      <section class="searchResultBox">
+      <section class="searchResultBox" data-search="@record.getSearchTerm()">
         <h3 class="subtitle is-5 has-text-weight-bold">
           Search terms:
           <a href="/stats/@record.getSearchTerm()">

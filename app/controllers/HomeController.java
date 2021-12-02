@@ -16,6 +16,8 @@ import javax.inject.Inject;
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.*;
+
+import Reddit.RedditHelper;
 import play.api.libs.json.Json;
 import play.libs.ws.*;
 import play.libs.F;
@@ -150,19 +152,10 @@ public class HomeController extends Controller implements WSBodyReadables, WSBod
             .thenApply((result) -> ok(views.html.stats.render(result, request)));
     }
 
-    private CompletionStage<F.Either<Result, Flow<JsonNode, JsonNode, ?>>> createActorFlow(Http.RequestHeader request) {
-        return CompletableFuture.completedFuture(
-            F.Either.Right(createFlowForActor())
-        );
-    }
-
-    private Flow<JsonNode, JsonNode, ?> createFlowForActor() {
-        return ActorFlow.actorRef(out -> Messenger.props(out), actorSystem, materializer);
-    }
-
     public WebSocket socket() {
         System.out.println("Connected to socket!");
-        return WebSocket.Json
-            .acceptOrResult(this::createActorFlow);
+        return WebSocket.Json.accept(request ->
+            ActorFlow.actorRef(out -> Messenger.props(out, ws, endpoint), actorSystem, materializer)
+        );
     }
 }
